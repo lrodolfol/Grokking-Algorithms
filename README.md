@@ -16,19 +16,6 @@ This repository contains my study of the book **"Grokking Algorithms"** by **Adi
     git clone https://github.com/your-username/grokking-algorithms.git
     ```
 
-2. Navigate to the project directory:
-
-    ```bash
-    cd grokking-algorithms
-    ```
-
-3. Compile and run the C++ examples using your preferred compiler. If you use **g++**:
-
-    ```bash
-    g++ -o example example.cpp
-    ./example
-    ```
-
 ## Study Goals
 
 The main goal of this repository is to deepen my understanding of:
@@ -37,11 +24,3 @@ The main goal of this repository is to deepen my understanding of:
 - Graph algorithms and graph traversal.
 - Data structures like lists, stacks, queues, and trees.
 - Programming techniques and algorithm analysis.
-
-## Contributing
-
-If you have any suggestions or improvements for the examples or explanations, feel free to open an **issue** or submit a **pull request**.
-
-## License
-
-This project is licensed under the [MIT License](LICENSE).
