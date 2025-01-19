@@ -1,5 +1,8 @@
 # Grokking Algorithms - Study and Examples in C++
 
+![Descrição da Imagem](https://m.media-amazon.com/images/I/81hveVIYkrL._UF894,1000_QL80_.jpg)
+
+
 This repository contains my study of the book **"Grokking Algorithms"** by **Aditya Bhargava**. I am applying the concepts from the book by creating examples and implementations in C++ to learn more about algorithms and data structures.
 
 ## What you'll find in this repository
