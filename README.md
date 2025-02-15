@@ -1,5 +1,8 @@
 # Grokking Algorithms - Study and Examples in C++
 
+![Descrição da Imagem](https://m.media-amazon.com/images/I/81hveVIYkrL._UF894,1000_QL80_.jpg)
+
+
 This repository contains my study of the book **"Grokking Algorithms"** by **Aditya Bhargava**. I am applying the concepts from the book by creating examples and implementations in C++ to learn more about algorithms and data structures.
 
 ## What you'll find in this repository
@@ -16,19 +19,6 @@ This repository contains my study of the book **"Grokking Algorithms"** by **Adi
     git clone https://github.com/your-username/grokking-algorithms.git
     ```
 
-2. Navigate to the project directory:
-
-    ```bash
-    cd grokking-algorithms
-    ```
-
-3. Compile and run the C++ examples using your preferred compiler. If you use **g++**:
-
-    ```bash
-    g++ -o example example.cpp
-    ./example
-    ```
-
 ## Study Goals
 
 The main goal of this repository is to deepen my understanding of:
@@ -37,11 +27,3 @@ The main goal of this repository is to deepen my understanding of:
 - Graph algorithms and graph traversal.
 - Data structures like lists, stacks, queues, and trees.
 - Programming techniques and algorithm analysis.
-
-## Contributing
-
-If you have any suggestions or improvements for the examples or explanations, feel free to open an **issue** or submit a **pull request**.
-
-## License
-
-This project is licensed under the [MIT License](LICENSE).
