@@ -1,4 +1,4 @@
-# Grokking Algorithms - Study and Examples in C++
+# Grokking Algorithms - Study and Examples
 
 ![Descrição da Imagem](https://m.media-amazon.com/images/I/81hveVIYkrL._UF894,1000_QL80_.jpg)
 

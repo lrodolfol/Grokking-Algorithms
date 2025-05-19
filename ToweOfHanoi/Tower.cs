@@ -1,0 +1,78 @@
+﻿namespace ToweOfHanoi;
+
+public class Tower
+{
+    public Stack<int> Disks { get; private set; } = new();
+    public int NumberOfDisks { get; private set; }
+    public string TowerName { get; private set; }
+
+    public Tower(int numberOfDisks, string towerName) => 
+        (NumberOfDisks, TowerName) = (numberOfDisks, towerName);
+
+    public ERegisterMovement Add(int disk)
+    {
+        if (Disks.Count == NumberOfDisks)
+            return ERegisterMovement.Fulled;
+
+        if (Disks.Count < NumberOfDisks)
+        {
+            Disks.Push(disk);
+            return ERegisterMovement.Attached;
+        }
+
+        if (Disks.Peek() < disk)
+            return ERegisterMovement.LastDiskSmaller;
+        
+        throw new InvalidOperationException("Nenhuma validação foi feita.");
+    }
+
+    public int Remove() =>
+        Disks.Count == 0 ? 0 : Disks.Pop();
+
+    public bool Verify()
+    {
+        if((Disks.Count == 0) || (Disks.Count < NumberOfDisks))
+            return false;
+        
+        int lastDisk;
+        for (int i = 0; i < Disks.Count; i++)
+        {
+            lastDisk = Disks.Peek();
+            if (i == 0)
+                continue;
+            
+            if(lastDisk < Disks.Peek())
+                throw new InvalidDataException("A torre não está ordenada.");
+        }
+        
+        return true;
+    }
+    
+    public bool IsEmpty() =>
+        Disks.Count == 0;
+    
+    public bool IsFull() =>
+        Disks.Count == NumberOfDisks;
+    
+    public bool HasDisks() =>
+        Disks.Count > 0;
+
+    public bool IfLastDiskSmaller(int disk)
+    {
+        if(Disks.Count == 0)
+            return false;
+
+        if (Disks.Peek() < disk)
+            return true;
+        
+        return false;
+    }
+
+    public bool IfMissingJustOneDisk()
+    {
+        if(Disks.Count + 1 == NumberOfDisks)
+            return true;
+        
+        return false;
+    }
+}
