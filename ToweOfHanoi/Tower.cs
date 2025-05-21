@@ -34,7 +34,23 @@ public class Tower
         if((Disks.Count == 0) || (Disks.Count < NumberOfDisks))
             return false;
         
-        int lastDisk;
+        int lastDisk = 0;
+        int cont = 0;
+
+        foreach (var disk in Disks)
+        {
+            if (cont > 0)
+            {
+                if (lastDisk > disk)
+                {
+                    throw new InvalidDataException("A torre nao esta ordenada.");
+                }
+            }
+         
+            lastDisk = disk;
+            cont++;
+        }
+        
         for (int i = 0; i < Disks.Count; i++)
         {
             lastDisk = Disks.Peek();
