@@ -8,9 +8,9 @@ public class Game
 
     public Game(int numberOfDisks)
     {
-        _towers.Add(new Tower(0, "Tower 1"));
-        _towers.Add(new Tower(0, "Tower 2"));
-        _towers.Add(new Tower(0, "Tower 3"));
+        _towers.Add(new Tower(numberOfDisks, "Tower 1"));
+        _towers.Add(new Tower(numberOfDisks, "Tower 2"));
+        _towers.Add(new Tower(numberOfDisks, "Tower 3"));
         
         var cont = 0;
         for (int i = numberOfDisks; i > 0; i--)
@@ -49,6 +49,24 @@ public class Game
 
             randomTowerPop = new Random().Next(0, 3);
             randomTowerPush = new Random().Next(0, 3);
+            
+            if (attempts <= 3)
+            {
+                //os dois primeiros movimentos sempre devem retirar discos da torre 0 e colocar numa torre vazia
+                if (attempts < 2)
+                    AlterPopForFirstTower(ref randomTowerPop, ref randomTowerPush);
+            
+                //na terceira jogada, o menor disco sempre irá para a torre com o 2ª menor disco, em outras palavras, o disco nunca vai para torre 0
+                if(attempts == 2)
+                    AlterPopAndPushIfIsThirdMovement(ref randomTowerPop, ref randomTowerPush);
+             
+                //no quarto movimento, o pop deve ser na primeira torre para uma torre vazia
+                if (attempts == 3)
+                    AlterPopAndPushIfFourth(ref randomTowerPop, ref randomTowerPush);
+                
+                attempts = attempts + 1;
+                continue;
+            }
 
             AlterIfPopAndPushIsEquals(ref randomTowerPop, randomTowerPush);
             AlterPopIfBothIsEmpty(ref randomTowerPop, randomTowerPush);
@@ -71,19 +89,6 @@ public class Game
                     }
                 }
             }
-            
-            //os dois primeiros movimentos sempre devem retirar discos da torre 0 e colocar numa torre vazia
-            if (attempts < 2)
-                AlterPopForFirstTower(ref randomTowerPop, ref randomTowerPush);
-            
-            //na terceira jogada, o menor disco sempre irá para a torre com o 2ª menor disco, em outras palavras, o disco nunca vai para torre 0
-            if(attempts == 2)
-                AlterPopAndPushIfIsThirdMovement(ref randomTowerPop, ref randomTowerPush);
-             
-            //no quarto movimento, o pop deve ser na primeira torre para uma torre vazia
-            if (attempts == 3)
-                AlterPopAndPushIfFourth(ref randomTowerPop, ref randomTowerPush);
-            
             
 
             //o menor disco nunca pode fica como primeiro disco de uma das torres, exeto se um das torrers conter todos os discos
