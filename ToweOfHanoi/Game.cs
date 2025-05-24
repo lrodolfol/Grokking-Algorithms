@@ -64,7 +64,9 @@ public class Game
                 if (attempts == 3)
                     AlterPopAndPushIfFourth(ref randomTowerPop, ref randomTowerPush);
 
+                MakeMovement(randomTowerPop, randomTowerPush);
                 attempts = attempts + 1;
+
                 continue;
             }
 
@@ -73,22 +75,20 @@ public class Game
             AlterPopIfEmpty(ref randomTowerPop, randomTowerPush);
             AlterPushIfFulled(ref randomTowerPush, randomTowerPop);
             AlterPopIfIsBigger(ref randomTowerPush, ref randomTowerPop);
-            AlterIfDiskIntoTowerIsSmallerThanPop(randomTowerPop, ref randomTowerPush);
-
 
             AlterPopAndPushIfOneDiskIsMissingForLastTower(ref randomTowerPop, ref randomTowerPush);
 
-            if (!_towers[randomTowerPop].IsEmpty())
-            {
-                if (!_towers[randomTowerPush].IsEmpty())
-                {
-                    if (_towers[randomTowerPush].Disks.Peek() < _towers[randomTowerPop].Disks.Peek())
-                    {
-                        Console.WriteLine($"opaa");
-                        Console.ReadKey();
-                    }
-                }
-            }
+            // if (!_towers[randomTowerPop].IsEmpty())
+            // {
+            //     if (!_towers[randomTowerPush].IsEmpty())
+            //     {
+            //         if (_towers[randomTowerPush].Disks.Peek() < _towers[randomTowerPop].Disks.Peek())
+            //         {
+            //             Console.WriteLine($"opaa");
+            //             Console.ReadKey();
+            //         }
+            //     }
+            // }
 
 
             //o menor disco nunca pode fica como primeiro disco de uma das torres, exeto se um das torrers conter todos os discos
@@ -100,6 +100,10 @@ public class Game
             //se o menor disco esta no topo de alguma torre, esse disco é o que precisa ser movido (pop)
             //AlterPopAndPushIfSmallerDiskOnTheTop(ref randomTowerPop, ref randomTowerPush);
 
+            //verifica se o disco que esta sendo retirado é maior que o disco que esta na torre de destino
+            if(AlterIfDiskIntoTowerIsSmallerThanPop(randomTowerPop, randomTowerPush))
+                continue;
+            
             //fazer essa tarefa dentro do objeto
             MakeMovement(randomTowerPop, randomTowerPush);
 
@@ -114,7 +118,7 @@ public class Game
             return;
 
         Console.WriteLine(
-            $"Removendo o disco {movement} da torre {_towers[randomTowerPop].TowerName} e Inserindo na torre {_towers[randomTowerPush].TowerName}");
+            $"Removendo o disco {movement.towePop} da torre {_towers[randomTowerPop].TowerName} e Inserindo na torre {_towers[randomTowerPush].TowerName}");
         _towers[randomTowerPush].Add(movement.towePop);
     }
 
@@ -220,25 +224,76 @@ public class Game
             randomTowerPop = options.Last();
     }
 
-    private void AlterIfDiskIntoTowerIsSmallerThanPop(int randomTowerPop, ref int randomTowerPush)
+    private bool AlterIfDiskIntoTowerIsSmallerThanPop(int randomTowerPop, int randomTowerPush)
     {
-        //Console.WriteLine(nameof(AlterIfDiskIntoTowerIsSmallerThanPop));
+        return _towers[randomTowerPush].IfLastDiskSmaller(_towers[randomTowerPop].Disks.Peek());
 
-        if (_towers[randomTowerPop].Disks.Count == 0)
-            return;
 
-        if (_towers[randomTowerPush].IfLastDiskSmaller(_towers[randomTowerPop].Disks.Peek()) == false)
-            return;
-
-        var options = new List<int> { 0, 1, 2 };
-
-        //Se o primeiro disco da pilha for menor que o disco que está sendo inserido, não pode colocar la
-        //Nem colocar de onde estiver tirando o disco
-
-        options.Remove(randomTowerPush);
-        options.Remove(randomTowerPop);
-
-        randomTowerPush = options.First();
+        // var optionsPush = new List<int> { 0, 1, 2 };
+        // var optionsPop = new List<int> { 0, 1, 2 };
+        // var options = new List<int> { 0, 1, 2 };
+        //
+        // if (_towers[randomTowerPop].Disks.Count == 0)
+        //     return;
+        //
+        // if (_towers[randomTowerPush].IfLastDiskSmaller(_towers[randomTowerPop].Disks.Peek()) == false)
+        //     return;
+        //
+        // //veja se o disco da torre que ira receber tem o menor disco que o os outros discos das outras torres
+        // //sendo que não pode haver torres vazias
+        // //e que a mesma torre nao tenho o menor e o maior disco
+        // var towerDiskPush = _towers[randomTowerPush].Disks.Peek();
+        // options.Remove(randomTowerPush);
+        //
+        // var itsSmallerDisk = towerDiskPush < _towers[options.First()].Disks.Peek() && towerDiskPush < _towers[options.Last()].Disks.Peek();
+        //
+        // if ( (_towers.Any(x => x.IsEmpty()) == false) && itsSmallerDisk &&
+        //      (_towers[randomTowerPush].Disks.Contains(_disksOrder.First() * 10) &&  _towers[randomTowerPush].Disks.Contains(_disksOrder.Last() * 10) == false)
+        //      )
+        // {
+        //     //se for,
+        //     //essa torre nao podera ser o push
+        //     optionsPush.Remove(randomTowerPush);
+        //
+        //     //encontre a torre com o maior disco (nao pode ser a torre que tem o menor disco), essa torre não poderá ser o pop
+        //     var biggerDiskTower =
+        //         _towers.FirstOrDefault(x => x.Disks.Count > 0 && x.Disks.Peek() == (_disksOrder.Last() * 10));
+        //     if (biggerDiskTower is not null)
+        //     {
+        //         optionsPop.Remove(_towers.IndexOf(biggerDiskTower));
+        //     }
+        //
+        //     //ira sobrar duas alternativas. 
+        //     //a torre com o maior disco não receber o menor disco
+        //     //colocar o menor disco na torre maior (o que acontece na maioria das vezes)
+        //
+        //     if (new Random().Next(0, 11) < 7)
+        //     {
+        //         randomTowerPop = randomTowerPush;
+        //
+        //         optionsPop.Remove(_towers.IndexOf(biggerDiskTower!));
+        //         randomTowerPush = _towers.IndexOf(biggerDiskTower!);
+        //     }
+        //     else
+        //     {
+        //         randomTowerPop = randomTowerPush;
+        //         randomTowerPush = _towers.IndexOf(biggerDiskTower!);
+        //     }
+        // }
+        // else if (itsSmallerDisk)
+        // {
+        //     optionsPush.Remove(randomTowerPush);
+        // }
+        // else
+        // {
+        //     //Senao
+        //     //Se o primeiro disco da pilha do push for menor que o disco que está sendo inserido, não pode colocar la
+        //     //Nem colocar de onde estiver tirando o disco
+        //     options.Remove(randomTowerPush);
+        //     options.Remove(randomTowerPop);
+        //     
+        //     randomTowerPop = options.First();
+        // }
     }
 
     private void AlterPushIfFulled(ref int randomTowerPush, int randomTowerPop)

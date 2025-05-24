@@ -27,7 +27,7 @@ public class Tower
     }
 
     public (ERegisterMovement registerMovement, int towePop) Remove() =>
-        Disks.Count == 0 ? (ERegisterMovement.Empty, 0) : (ERegisterMovement.Fulled, Disks.Pop());
+        Disks.Count == 0 ? (ERegisterMovement.Empty, 0) : (ERegisterMovement.Attached, Disks.Pop());
 
     public bool Verify()
     {
