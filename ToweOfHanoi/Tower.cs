@@ -26,8 +26,8 @@ public class Tower
         throw new InvalidOperationException("Nenhuma validação foi feita.");
     }
 
-    public int Remove() =>
-        Disks.Count == 0 ? 0 : Disks.Pop();
+    public (ERegisterMovement registerMovement, int towePop) Remove() =>
+        Disks.Count == 0 ? (ERegisterMovement.Empty, 0) : (ERegisterMovement.Fulled, Disks.Pop());
 
     public bool Verify()
     {
