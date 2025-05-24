@@ -3,18 +3,18 @@
 public class Tower
 {
     public Stack<int> Disks { get; private set; } = new();
-    public int NumberOfDisks { get; private set; }
+    public int NumberOfDisksFromGame { get; private set; }
     public string TowerName { get; private set; }
 
     public Tower(int numberOfDisks, string towerName) => 
-        (NumberOfDisks, TowerName) = (numberOfDisks, towerName);
+        (NumberOfDisksFromGame, TowerName) = (numberOfDisks, towerName);
 
     public ERegisterMovement Add(int disk)
     {
-        if (Disks.Count == NumberOfDisks)
+        if (Disks.Count == NumberOfDisksFromGame)
             return ERegisterMovement.Fulled;
 
-        if (Disks.Count < NumberOfDisks)
+        if (Disks.Count < NumberOfDisksFromGame)
         {
             Disks.Push(disk);
             return ERegisterMovement.Attached;
@@ -31,7 +31,7 @@ public class Tower
 
     public bool Verify()
     {
-        if((Disks.Count == 0) || (Disks.Count < NumberOfDisks))
+        if((Disks.Count == 0) || (Disks.Count < NumberOfDisksFromGame))
             return false;
         
         int lastDisk = 0;
@@ -68,7 +68,7 @@ public class Tower
         Disks.Count == 0;
     
     public bool IsFull() =>
-        Disks.Count == NumberOfDisks;
+        Disks.Count == NumberOfDisksFromGame;
     
     public bool HasDisks() =>
         Disks.Count > 0;
@@ -86,7 +86,7 @@ public class Tower
 
     public bool IfMissingJustOneDisk()
     {
-        if(Disks.Count + 1 == NumberOfDisks)
+        if(Disks.Count + 1 == NumberOfDisksFromGame)
             return true;
         
         return false;
