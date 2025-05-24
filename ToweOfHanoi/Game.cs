@@ -8,12 +8,14 @@ public class Game
 
     public Game(int numberOfDisks)
     {
+        _towers.Add(new Tower(0, "Tower 1"));
+        _towers.Add(new Tower(0, "Tower 2"));
+        _towers.Add(new Tower(0, "Tower 3"));
+        
         var cont = 0;
         for (int i = numberOfDisks; i > 0; i--)
         {
-            _towers.Add(new Tower(numberOfDisks, $"Tower {cont + 1}"));
             _towers[0].Add((i) * 10);
-
             _disksOrder.Push(i);
 
             cont++;
@@ -74,7 +76,7 @@ public class Game
             if (attempts < 2)
                 AlterPopForFirstTower(ref randomTowerPop, ref randomTowerPush);
             
-            //na terceira jogada, o menor disco sempre irá para a torre com o 2ª menor disco
+            //na terceira jogada, o menor disco sempre irá para a torre com o 2ª menor disco, em outras palavras, o disco nunca vai para torre 0
             if(attempts == 2)
                 AlterPopAndPushIfIsThirdMovement(ref randomTowerPop, ref randomTowerPush);
              
