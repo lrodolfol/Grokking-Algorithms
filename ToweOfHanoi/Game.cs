@@ -6,12 +6,13 @@ public class Game
 {
     private readonly List<Tower> _towers = new List<Tower>(3);
     private Stack<int> _disksOrder = new Stack<int>();
-
+    public int NumberOfDisks { get; private set; }
     public int Attemps { get; private set; }
     public Stopwatch Stopwatch { get; private set; } = Stopwatch.StartNew();
 
     public Game(int numberOfDisks)
     {
+        NumberOfDisks = numberOfDisks;
         _towers.Add(new Tower(numberOfDisks, "Tower 1"));
         _towers.Add(new Tower(numberOfDisks, "Tower 2"));
         _towers.Add(new Tower(numberOfDisks, "Tower 3"));
@@ -45,6 +46,8 @@ public class Game
                 Stopwatch.Stop();
 
                 Win(Attemps, Stopwatch);
+                Thread.Sleep(TimeSpan.FromSeconds(1));
+                
                 break;
             }
 
@@ -210,6 +213,9 @@ public class Game
 
     private bool AlterIfDiskIntoTowerIsSmallerThanPop(int randomTowerPop, int randomTowerPush)
     {
+        if(_towers[randomTowerPop].IsEmpty())
+            return false;
+        
         return _towers[randomTowerPush].IfLastDiskSmaller(_towers[randomTowerPop].Peek());
 
 
