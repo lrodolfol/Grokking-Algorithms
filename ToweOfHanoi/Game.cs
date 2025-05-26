@@ -1,10 +1,14 @@
 using System.Diagnostics;
-using ToweOfHanoi;
+
+namespace ToweOfHanoi;
 
 public class Game
 {
     private readonly List<Tower> _towers = new List<Tower>(3);
     private Stack<int> _disksOrder = new Stack<int>();
+
+    public int Attemps { get; private set; }
+    public Stopwatch Stopwatch { get; private set; } = Stopwatch.StartNew();
 
     public Game(int numberOfDisks)
     {
@@ -24,9 +28,6 @@ public class Game
 
     public void Run()
     {
-        var stopwatch = Stopwatch.StartNew();
-
-        int attempts = 0;
         int randomTowerPop;
         int randomTowerPush;
 
@@ -39,33 +40,33 @@ public class Game
                     Console.WriteLine($"Disco: {disk}");
             }
 
-            if (attempts > 0 && _towers[2].Verify())
+            if (Attemps > 0 && _towers[2].Verify())
             {
-                stopwatch.Stop();
+                Stopwatch.Stop();
 
-                Win(attempts, stopwatch);
+                Win(Attemps, Stopwatch);
                 break;
             }
 
             randomTowerPop = new Random().Next(0, 3);
             randomTowerPush = new Random().Next(0, 3);
 
-            if (attempts <= 3)
+            if (Attemps <= 3)
             {
                 //os dois primeiros movimentos sempre devem retirar discos da torre 0 e colocar numa torre vazia
-                if (attempts < 2)
+                if (Attemps < 2)
                     AlterPopForFirstTower(ref randomTowerPop, ref randomTowerPush);
 
                 //na terceira jogada, o menor disco sempre irá para a torre com o 2ª menor disco, em outras palavras, o disco nunca vai para torre 0
-                if (attempts == 2)
+                if (Attemps == 2)
                     AlterPopAndPushIfIsThirdMovement(ref randomTowerPop, ref randomTowerPush);
 
                 //no quarto movimento, o pop deve ser na primeira torre para uma torre vazia
-                if (attempts == 3)
+                if (Attemps == 3)
                     AlterPopAndPushIfFourth(ref randomTowerPop, ref randomTowerPush);
 
                 MakeMovement(randomTowerPop, randomTowerPush);
-                attempts = attempts + 1;
+                Attemps = Attemps + 1;
 
                 continue;
             }
@@ -77,19 +78,6 @@ public class Game
             AlterPopIfIsBigger(ref randomTowerPush, ref randomTowerPop);
 
             AlterPopAndPushIfOneDiskIsMissingForLastTower(ref randomTowerPop, ref randomTowerPush);
-
-            // if (!_towers[randomTowerPop].IsEmpty())
-            // {
-            //     if (!_towers[randomTowerPush].IsEmpty())
-            //     {
-            //         if (_towers[randomTowerPush].Disks.Peek() < _towers[randomTowerPop].Disks.Peek())
-            //         {
-            //             Console.WriteLine($"opaa");
-            //             Console.ReadKey();
-            //         }
-            //     }
-            // }
-
 
             //o menor disco nunca pode fica como primeiro disco de uma das torres, exeto se um das torrers conter todos os discos
             AlterPopAndPushIfFistDiskFromPushIsSmaller(ref randomTowerPop, ref randomTowerPush);
@@ -107,7 +95,7 @@ public class Game
             //fazer essa tarefa dentro do objeto
             MakeMovement(randomTowerPop, randomTowerPush);
 
-            attempts++;
+            Attemps++;
         }
     }
 
@@ -135,7 +123,7 @@ public class Game
         var options = new List<int> { 0, 1, 2 };
         options.Remove(0);
 
-        var tower = _towers.First(x => x.Disks.Count > 0 && x.Disks.Peek() == (_disksOrder.First() * 10));
+        var tower = _towers.First(x => x.Disks.Count > 0 && x.Peek() == (_disksOrder.First() * 10));
         options.Remove(_towers.IndexOf(tower));
 
         randomTowerPop = _towers.IndexOf(tower);
@@ -157,7 +145,7 @@ public class Game
         var pushBkp = randomTowerPush;
         var popBkp = randomTowerPop;
 
-        if (_towers[randomTowerPop].Disks.Peek() != (_disksOrder.Last() * 10))
+        if (_towers[randomTowerPop].Peek() != (_disksOrder.Last() * 10))
             return;
 
         randomTowerPop = pushBkp;
@@ -172,7 +160,7 @@ public class Game
         if (_towers[randomTowerPush].IsEmpty())
             return;
 
-        if (_towers[randomTowerPop].HasDisks() && _towers[randomTowerPop].Disks.Peek() == _disksOrder.First())
+        if (_towers[randomTowerPop].HasDisks() && _towers[randomTowerPop].Peek() == _disksOrder.First())
         {
             var options = new List<int> { 0, 1, 2 };
             options.Remove(randomTowerPop);
@@ -191,16 +179,12 @@ public class Game
             return;
 
         //Busca a possivel torre cujo o disco do topo seja o maior disco
-        var tower = _towers.FirstOrDefault(x => x.Disks.Count > 0 && x.Disks.Peek() == (_disksOrder.Last() * 10));
+        var tower = _towers.FirstOrDefault(x => x.Disks.Count > 0 && x.Peek() == (_disksOrder.Last() * 10));
 
         if (tower is null)
             return;
 
-        var options = new List<int> { 0, 1, 2 };
-
         randomTowerPush = 2;
-        options.Remove(2);
-
         randomTowerPop = _towers.IndexOf(tower);
     }
 
@@ -210,7 +194,7 @@ public class Game
             return;
 
         //se for tirar do 2 ou o disco de onde for tirar for 2 não é o menor disco, entao sai
-        if ((randomTowerPop == 2) || (_towers[randomTowerPop].Disks.Peek() != (_disksOrder.First() * 10)))
+        if ((randomTowerPop == 2) || (_towers[randomTowerPop].Peek() != (_disksOrder.First() * 10)))
             return;
 
         var options = new List<int> { 0, 1, 2 };
@@ -226,7 +210,7 @@ public class Game
 
     private bool AlterIfDiskIntoTowerIsSmallerThanPop(int randomTowerPop, int randomTowerPush)
     {
-        return _towers[randomTowerPush].IfLastDiskSmaller(_towers[randomTowerPop].Disks.Peek());
+        return _towers[randomTowerPush].IfLastDiskSmaller(_towers[randomTowerPop].Peek());
 
 
         // var optionsPush = new List<int> { 0, 1, 2 };
@@ -236,16 +220,16 @@ public class Game
         // if (_towers[randomTowerPop].Disks.Count == 0)
         //     return;
         //
-        // if (_towers[randomTowerPush].IfLastDiskSmaller(_towers[randomTowerPop].Disks.Peek()) == false)
+        // if (_towers[randomTowerPush].IfLastDiskSmaller(_towers[randomTowerPop].Peek()) == false)
         //     return;
         //
         // //veja se o disco da torre que ira receber tem o menor disco que o os outros discos das outras torres
         // //sendo que não pode haver torres vazias
         // //e que a mesma torre nao tenho o menor e o maior disco
-        // var towerDiskPush = _towers[randomTowerPush].Disks.Peek();
+        // var towerDiskPush = _towers[randomTowerPush].Peek();
         // options.Remove(randomTowerPush);
         //
-        // var itsSmallerDisk = towerDiskPush < _towers[options.First()].Disks.Peek() && towerDiskPush < _towers[options.Last()].Disks.Peek();
+        // var itsSmallerDisk = towerDiskPush < _towers[options.First()].Peek() && towerDiskPush < _towers[options.Last()].Peek();
         //
         // if ( (_towers.Any(x => x.IsEmpty()) == false) && itsSmallerDisk &&
         //      (_towers[randomTowerPush].Disks.Contains(_disksOrder.First() * 10) &&  _towers[randomTowerPush].Disks.Contains(_disksOrder.Last() * 10) == false)
@@ -257,7 +241,7 @@ public class Game
         //
         //     //encontre a torre com o maior disco (nao pode ser a torre que tem o menor disco), essa torre não poderá ser o pop
         //     var biggerDiskTower =
-        //         _towers.FirstOrDefault(x => x.Disks.Count > 0 && x.Disks.Peek() == (_disksOrder.Last() * 10));
+        //         _towers.FirstOrDefault(x => x.Disks.Count > 0 && x.Peek() == (_disksOrder.Last() * 10));
         //     if (biggerDiskTower is not null)
         //     {
         //         optionsPop.Remove(_towers.IndexOf(biggerDiskTower));

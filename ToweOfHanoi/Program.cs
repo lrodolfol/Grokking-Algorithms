@@ -1,4 +1,6 @@
-﻿Console.WriteLine("Jogo das Torres de Hanói");
+﻿using ToweOfHanoi;
+
+Console.WriteLine("Jogo das Torres de Hanói");
 Console.WriteLine("Aperte qualquer tecla para iniciar...");
 //Console.ReadKey();
 

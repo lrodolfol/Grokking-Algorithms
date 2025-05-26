@@ -91,4 +91,12 @@ public class Tower
         
         return false;
     }
+
+    public int Peek()
+    {
+        if(Disks.Count == 0)
+            throw new InvalidOperationException("Tower is empty");
+        
+        return Disks.Peek();
+    }
 }
